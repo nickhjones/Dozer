@@ -1,6 +1,6 @@
 build:
 	@brew bundle --no-upgrade
-	@carthage bootstrap --cache-builds --platform osx
+	@env PATH="$(CURDIR)/Scripts/CarthageBin:/usr/bin:/bin:/usr/sbin:/sbin" XCODE_XCCONFIG_FILE="$(CURDIR)/Configs/Carthage.xcconfig" "$$(command -v carthage)" bootstrap --cache-builds --platform macOS
 	@mkdir -p Dozer/Other/Generated
 	@swiftgen
 	@xcodegen 

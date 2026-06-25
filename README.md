@@ -3,13 +3,13 @@
 </p>
 <p align="center">Hide menu bar icons to give your Mac a cleaner look.</p>
 <p align="center">
-	<a href="https://github.com/Mortennn/Dozer/releases/latest">
+	<a href="https://github.com/nickhjones/Dozer/releases/latest">
  		<img src="https://img.shields.io/badge/download-latest-brightgreen.svg" alt="download">
 	<a href="https://img.shields.io/badge/platform-macOS-lightgrey.svg">
  		<img src="https://img.shields.io/badge/platform-macOS-lightgrey.svg" alt="platform">
 	</a>
-	<a href="https://img.shields.io/badge/requirements-macOS High Sierra+-ff69b4.svg">
- 		<img src="https://img.shields.io/badge/requirements-macOS High Sierra+-lightgrey.svg" alt="systemrequirements">
+	<a href="https://img.shields.io/badge/requirements-macOS Tahoe+-ff69b4.svg">
+		<img src="https://img.shields.io/badge/requirements-macOS Tahoe+-lightgrey.svg" alt="systemrequirements">
 	</a>
 	<a href="https://github.com/sindresorhus/swiftlint-sindre">
  		<img src="https://img.shields.io/badge/SwiftLint-Sindre-hotpink.svg" alt="swiftlint">
@@ -33,7 +33,54 @@ brew install --cask dozer
 
 Manual:
 
-[Download](https://github.com/Mortennn/Dozer/releases/latest), open and drag the app to the Applications folder.
+[Download](https://github.com/nickhjones/Dozer/releases/latest), open and drag the app to the Applications folder.
+
+## 👨‍💻 Build from source
+
+Prerequisites:
+
+* macOS 26.0+
+* Xcode 26.5+
+* Homebrew
+
+Prepare the project:
+
+```shell
+make build
+```
+
+This installs the Homebrew tools from `Brewfile`, builds the Carthage dependencies, runs SwiftGen, generates `Dozer.xcodeproj` with XcodeGen, and opens the project in Xcode.
+
+Build a local Release app from Terminal:
+
+```shell
+xcodebuild -project Dozer.xcodeproj \
+  -scheme Dozer \
+  -configuration Release \
+  -destination platform=macOS \
+  -derivedDataPath /private/tmp/DozerDerivedData \
+  build
+```
+
+The built app will be at:
+
+```text
+/private/tmp/DozerDerivedData/Build/Products/Release/Dozer.app
+```
+
+Quit any running copy of Dozer before replacing it in `/Applications`. If you installed Dozer with Homebrew Cask, uninstall that copy first so Homebrew does not replace your local build later:
+
+```shell
+brew uninstall --cask dozer
+```
+
+Then copy the Release `Dozer.app` into `/Applications` and choose Replace.
+
+### Signing notes
+
+Local builds are signed with Xcode's "Sign to Run Locally" ad-hoc identity. That is fine for personal use on your Mac, but it is not a polished public distribution signature.
+
+For a GitHub release that other people can download and open normally, sign with an Apple Developer ID certificate, notarize the DMG or ZIP with Apple, and staple the notarization ticket before uploading it. The app currently includes `com.apple.security.cs.disable-library-validation` so locally signed embedded frameworks can load under hardened runtime.
 
 ## ⚫️ Dozer Icons
 
@@ -59,4 +106,4 @@ There are 2 or 3, numbered from right to left:
 <!-- **Checkout [this GIF](https://raw.githubusercontent.com/Mortennn/Dozer/master/Stuff/demo.gif) to watch Dozer in action.** -->
 
 ## 📄 Requirements
-macOS 10.13+
+macOS 26.0+

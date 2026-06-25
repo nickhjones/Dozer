@@ -3,14 +3,15 @@ options:
   usesTabs: false
   tabWidth: 4
   createIntermediateGroups: true
-  xcodeVersion: 10.2.1
-  deploymentTarget: 10.13
+  xcodeVersion: 26.5
+  deploymentTarget:
+    macOS: 26.0
 targets:
   Dozer:
     type: application
     platform: macOS
     deploymentTarget: 
-      macOS: 10.13
+      macOS: 26.0
     configFiles:
       Debug: Configs/Debug.xcconfig
       Release: Configs/Release.xcconfig
@@ -24,7 +25,13 @@ targets:
         name: Sign Frameworks
         runOnlyWhenInstalling: true
         runOnlyWhenInstalling: true
-      - script: /usr/local/bin/swiftgen
+      - script: |
+          if command -v swiftgen >/dev/null; then
+            swiftgen
+          else
+            echo "error: SwiftGen not installed. Run 'brew bundle --no-upgrade'."
+            exit 1
+          fi
         name: Generate files using SwiftGen
       - path: Scripts/Swiftlint.sh
         name: Swiftlint
@@ -35,7 +42,11 @@ targets:
         SWIFT_VERSION: 5
         DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
         ENABLE_HARDENED_RUNTIME: true
-        MACOSX_DEPLOYMENT_TARGET: 10.13
+        ARCHS: "$(ARCHS_STANDARD)"
+        MACOSX_DEPLOYMENT_TARGET: 26.0
+        ONLY_ACTIVE_ARCH: NO
+        SDKROOT: macosx
+        SUPPORTED_PLATFORMS: macosx
         VERSIONING_SYSTEM: apple-generic
         CURRENT_PROJECT_VERSION: 30
     dependencies:
